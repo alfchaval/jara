@@ -4,12 +4,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private EditText edtPeso, edtCantidad, edtHuesos, edtCarnes, edtVegetales, edtCereales, edtVisceras;
+    private EditText edtPeso, edtDias, edtCantidad, edtHuesos, edtCarnes, edtVegetales, edtCereales, edtVisceras;
     private TextView txvCantidad, txvHuesos, txvCarnes, txvVegetales, txvCereales, txvVisceras,
                     canCantidad, canHuesos, canCarnes, canVegetales, canCereales, canVisceras;
     private double numCantidad, numHuesos, numCarnes, numVegetales, numCereales, numVisceras;
@@ -20,128 +21,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         edtPeso = (EditText)findViewById(R.id.edtPeso);
-        edtPeso.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                Actualizar();
-            }
-        });
-
+        edtPeso.addTextChangedListener(new GenericTextWatcher(edtPeso));
+        edtDias = (EditText)findViewById(R.id.edtDias);
+        edtDias.addTextChangedListener(new GenericTextWatcher(edtDias));
         edtCantidad = (EditText)findViewById(R.id.edtCantidad);
-        edtCantidad.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                canCantidad.setText(Raciones(txvCantidad.getText().toString(), edtCantidad.getText().toString()));
-            }
-        });
-
+        edtCantidad.addTextChangedListener(new GenericTextWatcher(edtCantidad));
         edtHuesos = (EditText)findViewById(R.id.edtHuesos);
-        edtHuesos.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                canHuesos.setText(Raciones(txvHuesos.getText().toString(), edtHuesos.getText().toString()));
-            }
-        });
-
+        edtHuesos.addTextChangedListener(new GenericTextWatcher(edtHuesos));
         edtCarnes = (EditText)findViewById(R.id.edtCarnes);
-        edtCarnes.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                canCarnes.setText(Raciones(txvCarnes.getText().toString(), edtCarnes.getText().toString()));
-            }
-        });
-
+        edtCarnes.addTextChangedListener(new GenericTextWatcher(edtCarnes));
         edtVegetales = (EditText)findViewById(R.id.edtVegetales);
-        edtVegetales.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                canVegetales.setText(Raciones(txvVegetales.getText().toString(), edtVegetales.getText().toString()));
-            }
-        });
-
+        edtVegetales.addTextChangedListener(new GenericTextWatcher(edtVegetales));
         edtCereales = (EditText)findViewById(R.id.edtCereales);
-        edtCereales.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                canCereales.setText(Raciones(txvCereales.getText().toString(), edtCereales.getText().toString()));
-            }
-        });
-
+        edtCereales.addTextChangedListener(new GenericTextWatcher(edtCereales));
         edtVisceras = (EditText)findViewById(R.id.edtVisceras);
-        edtVisceras.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                canVisceras.setText(Raciones(txvVisceras.getText().toString(), edtVisceras.getText().toString()));
-            }
-        });
+        edtVisceras.addTextChangedListener(new GenericTextWatcher(edtVisceras));
 
         txvCantidad = (TextView)findViewById(R.id.txvCantidad);
         txvHuesos = (TextView)findViewById(R.id.txvHuesos);
@@ -162,35 +56,78 @@ public class MainActivity extends AppCompatActivity {
 
     private void Actualizar() {
         double peso = 0;
+        int dias = 0;
         try {
             peso = Double.parseDouble(edtPeso.getText().toString());
+            dias = Integer.parseInt(edtDias.getText().toString());
         } catch (Exception e) {}
 
         numCantidad = peso*25;
-        txvCantidad.setText(numCantidad+"");
+        txvCantidad.setText(dias*numCantidad+"");
         numHuesos = numCantidad*65/100;
-        txvHuesos.setText(numHuesos+"");
+        txvHuesos.setText(dias*numHuesos+"");
         numCarnes = numCantidad*20/100;
-        txvCarnes.setText(numCarnes+"");
+        txvCarnes.setText(dias*numCarnes+"");
         numVegetales = numCantidad*5/100;
-        txvVegetales.setText(numVegetales+"");
+        txvVegetales.setText(dias*numVegetales+"");
         numCereales = numCantidad*2/100;
-        txvCereales.setText(numCereales+"");
+        txvCereales.setText(dias*numCereales+"");
         numVisceras = numCantidad*8/100;
-        txvVisceras.setText(numVisceras+"");
+        txvVisceras.setText(dias*numVisceras+"");
 
-        canCantidad.setText(Raciones(txvCantidad.getText().toString(), edtCantidad.getText().toString()));
-        canHuesos.setText(Raciones(txvHuesos.getText().toString(), edtHuesos.getText().toString()));
-        canCarnes.setText(Raciones(txvCarnes.getText().toString(), edtCarnes.getText().toString()));
-        canVegetales.setText(Raciones(txvVegetales.getText().toString(), edtVegetales.getText().toString()));
-        canCereales.setText(Raciones(txvCereales.getText().toString(), edtCereales.getText().toString()));
-        canVisceras.setText(Raciones(txvVisceras.getText().toString(), edtVisceras.getText().toString()));
+        canCantidad.setText(Dias(numCantidad, edtCantidad.getText().toString()));
+        canHuesos.setText(Dias(numHuesos, edtHuesos.getText().toString()));
+        canCarnes.setText(Dias(numCarnes, edtCarnes.getText().toString()));
+        canVegetales.setText(Dias(numVegetales, edtVegetales.getText().toString()));
+        canCereales.setText(Dias(numCereales, edtCereales.getText().toString()));
+        canVisceras.setText(Dias(numVisceras, edtVisceras.getText().toString()));
     }
 
-    private String Raciones(String necesario, String total) {
+    private String Dias(Double necesario, String total) {
         try {
-            return String.format("%.2f", (Double.parseDouble(total)/Double.parseDouble(necesario)) )+" veces";
+            return String.format("%.2f", (Double.parseDouble(total)/necesario) )+" días";
         } catch (Exception e) {}
         return "";
+    }
+
+    private class GenericTextWatcher implements TextWatcher {
+
+        private View view;
+        private GenericTextWatcher(View view) {
+            this.view = view;
+        }
+
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        public void afterTextChanged(Editable editable) {
+            switch(view.getId()){
+                case R.id.edtPeso:
+                case R.id.edtDias:
+                    Actualizar();
+                    break;
+                case R.id.edtCantidad:
+                    canCantidad.setText(Dias(numCantidad, edtCantidad.getText().toString()));
+                    break;
+                case R.id.edtHuesos:
+                    canHuesos.setText(Dias(numHuesos, edtHuesos.getText().toString()));
+                    break;
+                case R.id.edtCarnes:
+                    canCarnes.setText(Dias(numCarnes, edtCarnes.getText().toString()));
+                    break;
+                case R.id.edtVegetales:
+                    canVegetales.setText(Dias(numVegetales, edtVegetales.getText().toString()));
+                    break;
+                case R.id.edtCereales:
+                    canCereales.setText(Dias(numCereales, edtCereales.getText().toString()));
+                    break;
+                case R.id.edtVisceras:
+                    canVisceras.setText(Dias(numVisceras, edtVisceras.getText().toString()));
+                break;
+            }
+        }
     }
 }
